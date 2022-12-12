@@ -1,0 +1,190 @@
+CREATE TABLE users(
+    id INT IDENTITY PRIMARY KEY,
+    name VARCHAR(60) NOT NULL,
+    login VARCHAR(50) NOT NULL,
+    password VARCHAR(30) NOT NULL,
+    role INT NOT NULL
+)
+
+CREATE TABLE rooms(
+    id INT IDENTITY PRIMARY KEY,
+    capacity INT NOT NULL
+)
+
+CREATE TABLE applications(
+    id INT IDENTITY PRIMARY KEY,
+    from_user INT NOT NULL,
+    at_time DATE NOT NULL,
+    to_time DATE NOT NULL,
+    room_id INT NOT NULL,
+    status INT NOT NULL,
+
+    CONSTRAINT FK_application_from_user FOREIGN KEY(from_user) REFERENCES users(id) ON DELETE CASCADE,
+    CONSTRAINT FK_application_room FOREIGN KEY(room_id) REFERENCES rooms(id) ON DELETE CASCADE
+)
+
+CREATE TABLE users_palace(
+    id INT IDENTITY PRIMARY KEY,
+    application_id INT NOT NULL,
+    palace INT NOT NULL,
+
+    CONSTRAINT FK_users_palace_application FOREIGN KEY (application_id) REFERENCES applications(id) ON DELETE CASCADE
+)
+ALTER TABLE users_palace
+ADD CONSTRAINT FK_userpalace_userid
+FOREIGN KEY (userid) REFERENCES users(id);
+
+
+CREATE PROCEDURE register
+    @name VARCHAR(60),
+    @login VARCHAR(50),
+    @password VARCHAR(30),
+    @role INT
+AS
+BEGIN
+    INSERT INTO users(name, [login], [password], role)
+    VALUES(@name, @login, @password, @role);
+    SELECT * FROM users WHERE [login] = @login AND [password] = @password;
+END
+
+CREATE PROCEDURE login @login VARCHAR(50), @password VARCHAR(30)
+AS
+BEGIN
+SELECT * FROM users where [login] = @login AND [password] = @password
+END
+
+EXEC register 'admin', 'admin', 'admin', 0;
+
+EXEC login 'admin', 'admin';
+
+CREATE PROCEDURE BookingRoom @userid INT, @at_time DATE, @to_time DATE, @roomid INT, @status INT = 0
+AS
+BEGIN
+    INSERT INTO applications(
+        from_user,
+        at_time,
+        to_time,
+        room_id,
+        [status]
+    )
+    VALUES(
+        @userid,
+        @at_time,
+        @to_time,
+        @roomid,
+        @status
+    )
+END
+
+CREATE TABLE notifications(
+    id INT IDENTITY PRIMARY KEY,
+    userid INT NOT NULl,
+    message TEXT NOT NULL,
+    isReaded BIT NOT NULL,
+
+    CONSTRAINT FK_notifications_users FOREIGN KEY(userid) REFERENCES users(id) ON DELETE CASCADE
+)
+
+CREATE PROCEDURE editStatusApplication @applicationid INT, @message text, @status INT, @userid INT
+AS
+BEGIN
+    UPDATE applications SET [status] = @status WHERE id = @applicationid
+    INSERT INTO notifications(
+        userid,
+        message,
+        isReaded
+    )
+    VALUES(
+        @userid,
+        @message,
+        0
+    )
+END
+
+CREATE PROCEDURE bookingPalace @userid INT, @place INT, @applicetionid INT
+AS
+BEGIN
+    INSERT INTO users_palace(
+        application_id,
+        userid,
+        palace
+    )
+    VALUES(
+        @applicetionid,
+        @userid,
+        @place
+    )
+END
+
+
+CREATE PROCEDURE MyBookings @userid INT
+AS
+BEGIN
+SELECT * FROM applications WHERE applications.from_user = @userid AND [status] = 1
+END
+
+CREATE PROCEDURE GetNewBookings
+AS
+BEGIN
+SELECT * FROM applications WHERE [status] = 0
+END
+
+CREATE PROCEDURE GetActiveBookings
+AS
+BEGIN
+    SELECT * FROM applications WHERE GETDATE() > applications.to_time;
+END
+
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+ALTER PROCEDURE [dbo].[GetActiveBookings]
+AS
+BEGIN
+    SELECT * FROM applications WHERE GETDATE() > applications.to_time AND [status] = 1;
+END
+GO
+
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE PROCEDURE [dbo].[MyBookings] @userid INT
+AS
+BEGIN
+SELECT * FROM applications WHERE applications.from_user = @userid AND [status] = 1
+END
+GO
+
+CREATE PROCEDURE GetAllBookings
+AS
+BEGIN
+select * from applications;
+END
+
+CREATE PROCEDURE GetFreeRooms
+AS
+BEGIN
+    SELECT  FROM rooms LEFT JOIN 
+END
+
+ALTER TABLE rooms
+
+ADD to_date DATE NOT NULL
+
+
+CREATE PROCEDURE GetFreeRooms
+AS
+BEGIN
+SELECT * from rooms WHERE GETDATE() > rooms.to_date;
+END
+
+CREATE PROCEDURE SetBusyToRoom @roomid INT, @at_date DATE, @to_date DATE
+AS
+BEGIN
+UPDATE rooms
+SET at_date = @at_date, to_date = @to_date
+WHERE id = @roomid
+END
