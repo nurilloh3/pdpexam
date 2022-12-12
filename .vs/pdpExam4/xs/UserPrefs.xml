@@ -1,0 +1,35 @@
+﻿<Properties StartupConfiguration="{113A7D0F-0D8B-4D95-B2E7-30A376B13197}|Default">
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Brokers/Storage/StorageBroker.cs">
+    <Files>
+      <File FileName="Program.cs" Line="46" Column="39" />
+      <File FileName="Brokers/Storage/IStorageBroker.cs" Line="18" Column="34" />
+      <File FileName="Models/User.cs" Line="14" Column="18" />
+      <File FileName="Brokers/Storage/StorageBroker.cs" Line="13" Column="22" />
+      <File FileName="Models/Room.cs" Line="7" Column="36" />
+      <File FileName="Models/Notification.cs" Line="8" Column="37" />
+    </Files>
+    <Pads>
+      <Pad Id="ProjectPad">
+        <State name="__root__">
+          <Node name="pdpExam4" expanded="True">
+            <Node name="pdpExam4" expanded="True">
+              <Node name="Brokers" expanded="True">
+                <Node name="Storage" expanded="True">
+                  <Node name="StorageBroker.cs" selected="True" />
+                </Node>
+              </Node>
+              <Node name="Models" expanded="True" />
+            </Node>
+          </Node>
+        </State>
+      </Pad>
+    </Pads>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.ItemProperties.pdpExam4 PreferredExecutionTarget="MonoDevelop.Default" />
+  <MultiItemStartupConfigurations />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+</Properties>
